@@ -1,4 +1,5 @@
-﻿using ElectronicShopping.Api.Repositories.Entities;
+﻿using ElectronicShopping.Api.Infrastructure.Database;
+using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
 
 namespace ElectronicShopping.Api.Repositories

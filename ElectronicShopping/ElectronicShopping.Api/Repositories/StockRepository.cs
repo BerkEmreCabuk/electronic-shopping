@@ -1,4 +1,5 @@
 ﻿using ElectronicShopping.Api.Enums;
+using ElectronicShopping.Api.Infrastructure.Database;
 using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
 using System.Threading.Tasks;

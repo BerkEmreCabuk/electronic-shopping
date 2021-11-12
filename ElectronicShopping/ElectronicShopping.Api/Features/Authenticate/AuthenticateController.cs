@@ -20,9 +20,9 @@ namespace ElectronicShopping.Api.Features.Authenticate
 
         [HttpPost]
         [Consumes("application/x-www-form-urlencoded")]
-        public async Task<IActionResult> Post([FromBody] AuthenticateRequestModel model)
+        public async Task<IActionResult> Post([FromForm] AuthenticateRequestModel model)
         {
-            return Ok(await _mediator.Send(new AuthenticateCommand(model.username,model.password)));
+            return Ok(await _mediator.Send(new AuthenticateCommand(model.username, model.password)));
         }
     }
 }

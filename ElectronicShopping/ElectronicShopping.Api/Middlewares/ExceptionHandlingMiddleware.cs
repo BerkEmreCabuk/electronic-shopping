@@ -1,6 +1,8 @@
 ﻿using ElectronicShopping.Api.Models.Exceptions;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -9,6 +11,11 @@ namespace ElectronicShopping.Api.Middlewares
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly IList<string> contentTypes = new List<string>()
+        {
+            "application/json",
+            "application/x-www-form-urlencoded"
+        };
         public ExceptionHandlingMiddleware(
             RequestDelegate next
         )
@@ -19,7 +26,7 @@ namespace ElectronicShopping.Api.Middlewares
         {
             try
             {
-                if (!string.IsNullOrEmpty(context?.Request?.ContentType) && context.Request.ContentType != "application/json")
+                if (!string.IsNullOrEmpty(context?.Request?.ContentType) && !contentTypes.Contains(context.Request.ContentType))
                     throw new NotAcceptableException();
                 await _next.Invoke(context);
             }

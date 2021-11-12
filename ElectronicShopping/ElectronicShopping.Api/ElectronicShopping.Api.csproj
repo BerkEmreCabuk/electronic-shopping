@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Cart\Models\" />
     <Folder Include="Features\Cart\Queries\" />
   </ItemGroup>
 

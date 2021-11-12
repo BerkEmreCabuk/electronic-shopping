@@ -1,7 +1,7 @@
 ﻿using ElectronicShopping.Api.Repositories.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ElectronicShopping.Api.Repositories
+namespace ElectronicShopping.Api.Infrastructure.Database
 {
     public class ElectronicShoppingDbContext : DbContext
     {
@@ -44,9 +44,9 @@ namespace ElectronicShopping.Api.Repositories
             modelBuilder.Entity<CartDetailEntity>(e =>
             {
                 e.HasKey(x => x.Id);
-                e.HasOne(x => x.Basket)
-                 .WithMany(x => x.BasketDetails)
-                 .HasForeignKey(x => x.BasketId);
+                e.HasOne(x => x.Cart)
+                 .WithMany(x => x.CartDetails)
+                 .HasForeignKey(x => x.CartId);
             });
         }
     }

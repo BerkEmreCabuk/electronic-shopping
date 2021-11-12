@@ -1,4 +1,7 @@
-﻿using ElectronicShopping.Api.Features.Cart.Commands;
+﻿using AutoMapper;
+using ElectronicShopping.Api.Features.Cart.Commands;
+using ElectronicShopping.Api.Features.Cart.Models;
+using ElectronicShopping.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +15,16 @@ namespace ElectronicShopping.Api.Features.Cart
     public class CartController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public CartController(IMediator mediator)
+        private readonly UserModel _userModel;
+        private readonly IMapper _mapper;
+        public CartController(
+            IMediator mediator,
+            UserModel userModel,
+            IMapper mapper)
         {
             _mediator = mediator;
+            _userModel = userModel;
+            _mapper = mapper;
         }
 
         [HttpPost("add-product")]
@@ -23,9 +33,12 @@ namespace ElectronicShopping.Api.Features.Cart
         [ProducesResponseType(typeof(ProblemDetails), 401)]
         [ProducesResponseType(typeof(ProblemDetails), 404)]
         [ProducesResponseType(typeof(ProblemDetails), 422)]
-        public async Task<IActionResult> AddProduct([FromBody] AddProductCommand model)
+        public async Task<IActionResult> AddProduct([FromBody] AddProductRequestModel model)
         {
-            return Ok(await _mediator.Send(model));
+            var command = _mapper.Map<AddProductCommand>(model);
+            command.UserId = _userModel.Id;
+
+            return Ok(await _mediator.Send(command));
         }
     }
 }

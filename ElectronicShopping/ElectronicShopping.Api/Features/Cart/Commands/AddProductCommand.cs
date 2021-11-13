@@ -13,7 +13,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
 {
     public class AddProductCommand : IRequest, IMapping
     {
-        public long? CartId { get; set; }
+        public CartEntity Cart { get; set; }
         public long UserId { get; set; }
         public long ItemId { get; set; }
         public int Quantity { get; set; }
@@ -22,12 +22,10 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
         {
             profileExpression
                 .CreateMap<AddProductCommand, CartDetailEntity>()
-                .ForMember(dest => dest.Cart, opt =>
+                .ForMember(dest => dest.Cart, opt => opt.MapFrom((src, dest) =>
                 {
-                    opt.PreCondition(src => !src.CartId.HasValue);
-                    opt.MapFrom(src => new CartEntity() { UserId = src.UserId });
-                })
-                .ForMember(dest => dest.CartId, opt => opt.Condition(src => (src.CartId.HasValue)));
+                    return src.Cart ?? new CartEntity() { UserId = src.UserId };
+                }));
 
             profileExpression.CreateMap<AddProductRequestModel, AddProductCommand>();
         }
@@ -36,27 +34,32 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
     public class AddProductCommandHandler : AsyncRequestHandler<AddProductCommand>
     {
         private readonly ICartDetailRepository _cartDetailRepository;
+        private readonly ICartRepository _cartRepository;
         private readonly IStockRepository _stockRepository;
         private readonly IMapper _mapper;
         public AddProductCommandHandler(
             ICartDetailRepository cartDetailRepository,
+            ICartRepository cartRepository,
             IStockRepository stockRepository,
             IMapper mapper)
         {
             _cartDetailRepository = cartDetailRepository;
+            _cartRepository = cartRepository;
             _stockRepository = stockRepository;
             _mapper = mapper;
         }
         protected override async Task Handle(AddProductCommand request, CancellationToken cancellationToken)
         {
-            var stock = await _stockRepository.GetByItemId(request.ItemId);
+            var stock = await _stockRepository.GetByItemId(request.ItemId, true);
 
-            if (request.Quantity > stock.FreeQuantity)
-            {
+            if (stock.InsufficientFreeQuantity(request.Quantity))
                 throw new UnprocessableException($"Insufficient stock. Current salable stock = {stock.FreeQuantity}");
-            }
 
+            request.Cart = await _cartRepository.GetByUserIdAsync(request.UserId, true);
             await _cartDetailRepository.CreateAsync(_mapper.Map<CartDetailEntity>(request));
+
+            stock.ReduceFreeQuantity(request.Quantity);
+            await _cartDetailRepository.SaveChangeAsync();
         }
     }
 }

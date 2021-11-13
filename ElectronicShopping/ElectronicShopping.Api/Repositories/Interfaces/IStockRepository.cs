@@ -5,6 +5,6 @@ namespace ElectronicShopping.Api.Repositories.Interfaces
 {
     public interface IStockRepository : IGenericRepository<StockEntity>
     {
-        Task<StockEntity> GetByItemId(long itemId, bool hasTracking = false);
+        Task<StockEntity> GetByItemId(long itemId, bool hasTracking = true);
     }
 }

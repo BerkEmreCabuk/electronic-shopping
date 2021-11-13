@@ -15,7 +15,7 @@ namespace ElectronicShopping.Api.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<StockEntity> GetByItemId(long itemId, bool hasTracking = false)
+        public async Task<StockEntity> GetByItemId(long itemId, bool hasTracking = true)
         {
             return await this.GetAsync(
                 x =>

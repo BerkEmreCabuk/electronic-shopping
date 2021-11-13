@@ -24,11 +24,17 @@ namespace ElectronicShopping.Api.Repositories
             return _dbContext.Set<T>().AsQueryable();
         }
 
-        public async Task<IList<T>> GetAllAsync(bool hasTracking = false)
+        public async Task<IList<T>> GetAllAsync(bool hasTracking = false, params Expression<Func<T, object>>[] includeProperties)
         {
+            var query = _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE);
+            foreach (var includeProperty in includeProperties)
+            {
+                query.Include(includeProperty);
+            }
+
             return hasTracking
-                ? await _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE).ToListAsync()
-                : await _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE).AsNoTracking().ToListAsync();
+                ? await query.ToListAsync()
+                : await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> GetAsync(int id)
@@ -36,11 +42,17 @@ namespace ElectronicShopping.Api.Repositories
             return await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.Status == RecordStatuses.ACTIVE);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = false)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = true, params Expression<Func<T, object>>[] includeProperties)
         {
+            var query = _dbContext.Set<T>().Where(predicate);
+            foreach (var includeProperty in includeProperties)
+            {
+                query = query.Include(includeProperty);
+            }
+
             return hasTracking
-                ? await _dbContext.Set<T>().Where(predicate).FirstOrDefaultAsync()
-                : await _dbContext.Set<T>().AsNoTracking().Where(predicate).FirstOrDefaultAsync();
+                ? await query.FirstOrDefaultAsync()
+                : await query.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public async Task<bool> ExistAsync(int id)
@@ -71,6 +83,11 @@ namespace ElectronicShopping.Api.Repositories
         {
             entity.Delete();
             _dbContext.Set<T>().Remove(entity);
+        }
+
+        public async Task SaveChangeAsync()
+        {
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

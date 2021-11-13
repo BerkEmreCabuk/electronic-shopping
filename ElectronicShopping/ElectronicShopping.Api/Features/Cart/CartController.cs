@@ -40,5 +40,19 @@ namespace ElectronicShopping.Api.Features.Cart
 
             return Ok(await _mediator.Send(command));
         }
+
+        [HttpPut("update-product")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(typeof(ProblemDetails), 400)]
+        [ProducesResponseType(typeof(ProblemDetails), 401)]
+        [ProducesResponseType(typeof(ProblemDetails), 404)]
+        [ProducesResponseType(typeof(ProblemDetails), 422)]
+        public async Task<IActionResult> UpdateProduct([FromBody] UpdateProductRequestModel model)
+        {
+            var command = _mapper.Map<UpdateProductCommand>(model);
+            command.UserId = _userModel.Id;
+
+            return Ok(await _mediator.Send(command));
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace ElectronicShopping.Api.Repositories.Interfaces
 {
     public interface ICartRepository : IGenericRepository<CartEntity>
     {
-        Task<CartEntity> CreateAsync(long userId);
+        Task<CartEntity> GetWithDetailByUserIdAsync(long userId, bool hasTracking = true);
+        Task<CartEntity> GetByUserIdAsync(long userId, bool hasTracking = true);
     }
 }

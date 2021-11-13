@@ -10,5 +10,15 @@ namespace ElectronicShopping.Api.Repositories.Entities
         public long FreeQuantity { get; set; }
         [ForeignKey("ItemId")]
         public ItemEntity Item { get; set; }
+        public bool InsufficientFreeQuantity(int quantity)
+        {
+            return quantity > this.FreeQuantity;
+        }
+
+        public void ReduceFreeQuantity(int quantity)
+        {
+            this.FreeQuantity -= quantity;
+            this.Update();
+        }
     }
 }

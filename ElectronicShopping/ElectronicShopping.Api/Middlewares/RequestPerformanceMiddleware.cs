@@ -27,7 +27,7 @@ namespace ElectronicShopping.Api.Middlewares
             if ((end - start).TotalMilliseconds > 1000)
             {
                 context.Request.EnableBuffering();
-                var token = context.Request.Headers["token"].FirstOrDefault();
+                var token = context.Request.Headers["Authorization"].FirstOrDefault();
                 var body = context.Request.Body;
                 var payload = "";
                 if (body.CanSeek && body.Length > 0)

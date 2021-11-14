@@ -5,6 +5,7 @@ using ElectronicShopping.Api.Models.Exceptions;
 using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;
@@ -27,12 +28,15 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
     {
         private readonly Lazy<ICartRepository> _cartRepository;
         private readonly Lazy<IStockRepository> _stockRepository;
+        private readonly ILogger<UpdateProductCommandHandler> _logger;
         public UpdateProductCommandHandler(
             Lazy<ICartRepository> cartRepository,
-            Lazy<IStockRepository> stockRepository)
+            Lazy<IStockRepository> stockRepository,
+            ILogger<UpdateProductCommandHandler> logger)
         {
             _cartRepository = cartRepository;
             _stockRepository = stockRepository;
+            _logger = logger;
         }
         protected override async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
@@ -50,6 +54,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
             {
                 cartDetail.Delete();
                 cart.AddAmount(differenceQuantity * cartDetail.Item.Price);
+                _logger.LogInformation("Cart detail deleted {@cartDetail}", cartDetail);
             }
             else
             {
@@ -60,6 +65,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
             }
             stock.ReduceFreeQuantity(differenceQuantity);
             await _cartRepository.Value.SaveChangeAsync();
+            _logger.LogInformation("Update product {@cartDetail}", cartDetail);
         }
     }
 }

@@ -5,6 +5,7 @@ using ElectronicShopping.Api.Models.Exceptions;
 using ElectronicShopping.Api.Repositories.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading;

@@ -16,6 +16,10 @@ namespace ElectronicShopping.Api.Infrastructure.Cache.Redis
         public async Task Add(string key, object data, TimeSpan? expireTime = null)
         {
             string jsonData = JsonSerializer.Serialize(data);
+            if(await KeyExists(key))
+            {
+                await Remove(key);
+            }
             await _redisServer.Database.StringSetAsync(key, jsonData, expireTime);
         }
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ElectronicShopping.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace ElectronicShopping.Api.Models.Exceptions
     {
         public BadRequestException()
         {
-            ProblemDetailsModel.Title = "Error Occured";
-            ProblemDetailsModel.Detail = "Status for error occurred";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstant.BAD_REQUEST_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstant.BAD_REQUEST_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }
         public BadRequestException(string message) : base(message)
@@ -26,7 +27,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }
 
-        public BadRequestException(string message, string title) : base(message, title)
+        public BadRequestException(string title, string message) : base(title,message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status400BadRequest;
         }

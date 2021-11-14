@@ -38,7 +38,7 @@ namespace ElectronicShopping.Api.Middlewares
 
             var userModel = SecurityHelper.ValidateToken(token, _appSettings.Secret);
 
-            var cacheToken = await _cacheService.Get<string>($"{CacheKeyConstant.UserInfo}{userModel?.Id}");
+            var cacheToken = await _cacheService.Get<string>($"{CacheKeyConstant.USER_INFO}{userModel?.Id}");
             if (string.IsNullOrEmpty(cacheToken) || cacheToken != token)
                 throw new UnauthorizedException("Token is expired or invalid");
 

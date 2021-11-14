@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ElectronicShopping.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace ElectronicShopping.Api.Models.Exceptions
     {
         public NotAcceptableException()
         {
-            ProblemDetailsModel.Title = "Request Invalid Format";
-            ProblemDetailsModel.Detail = "Status for request invalid format";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstant.NOTACCEPTABLE_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstant.NOTACCEPTABLE_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }
 
@@ -27,7 +28,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }
 
-        public NotAcceptableException(string message, string title) : base(message, title)
+        public NotAcceptableException(string title, string message) : base(title, message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status406NotAcceptable;
         }

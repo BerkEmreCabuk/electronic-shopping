@@ -42,7 +42,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
 
             var shoppingCartModel = _mapper.Map<CartModel>(shoppingCart);
 
-            await _cacheService.Add($"{CacheKeyConstant.CartInfo}{request.UserId}", shoppingCartModel);
+            await _cacheService.Add($"{CacheKeyConstant.CART_INFO}{request.UserId}", shoppingCartModel);
         }
     }
 }

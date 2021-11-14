@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ElectronicShopping.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace ElectronicShopping.Api.Models.Exceptions
     {
         public UnauthorizedException()
         {
-            ProblemDetailsModel.Title = "Unauthorized";
-            ProblemDetailsModel.Detail = "Status for unauthorized request";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstant.UNAUTHORIZED_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstant.UNAUTHORIZED_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }
 
@@ -27,7 +28,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }
 
-        public UnauthorizedException(string message, string title) : base(message, title)
+        public UnauthorizedException(string title, string message) : base(title, message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status401Unauthorized;
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ElectronicShopping.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace ElectronicShopping.Api.Models.Exceptions
     {
         public NotFoundException()
         {
-            ProblemDetailsModel.Title = "Not Found";
-            ProblemDetailsModel.Detail = "Status for not found";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstant.NOTFOUND_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstant.NOTFOUND_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }
 
@@ -27,7 +28,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }
 
-        public NotFoundException(string message, string title) : base(message, title)
+        public NotFoundException(string title, string message) : base(title, message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status404NotFound;
         }

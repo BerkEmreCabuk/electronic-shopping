@@ -36,7 +36,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Extensions.Add("DocumentUrl", "http://localhost:5000/swagger/index.html");
         }
 
-        public BaseException(string message, string title)
+        public BaseException(string title, string message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status500InternalServerError;
             ProblemDetailsModel.Title = !string.IsNullOrEmpty(title) ? title : message;

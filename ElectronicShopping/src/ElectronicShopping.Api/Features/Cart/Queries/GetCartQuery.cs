@@ -43,13 +43,13 @@ namespace ElectronicShopping.Api.Features.Cart.Queries
         {
             if (request.FromCache)
             {
-                var shoppingCartModel = await _cacheService.Get<CartModel>($"{CacheKeyConstant.CartInfo}{request.UserId}");
+                var shoppingCartModel = await _cacheService.Get<CartModel>($"{CacheKeyConstant.CART_INFO}{request.UserId}");
                 if (shoppingCartModel == null)
                 {
                     var shoppingCart = await _cartRepository.Value.GetWithAllAsync(request.UserId, ct);
                     if (shoppingCart == null)
                         throw new NotFoundException("cart not found");
-                    await _cacheService.Add($"{CacheKeyConstant.CartInfo}{request.UserId}", shoppingCart);
+                    await _cacheService.Add($"{CacheKeyConstant.CART_INFO}{request.UserId}", shoppingCart);
                     return _mapper.Map<CartModel>(shoppingCart);
                 }
                 return shoppingCartModel;

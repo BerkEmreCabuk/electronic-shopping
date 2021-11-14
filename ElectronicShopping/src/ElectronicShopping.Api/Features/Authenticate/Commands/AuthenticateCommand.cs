@@ -54,7 +54,7 @@ namespace ElectronicShopping.Api.Features.Authenticate.Commands
 
             var token = SecurityHelper.GenerateToken(user, _appSettingsModel.Secret);
 
-            await _cacheService.Add($"{CacheKeyConstant.UserInfo}{user.Id}", token, TimeSpan.FromHours(6));
+            await _cacheService.Add($"{CacheKeyConstant.USER_INFO}{user.Id}", token, TimeSpan.FromHours(6));
             _logger.LogInformation("token created {@token}", token);
 
             return new TokenModel(token);

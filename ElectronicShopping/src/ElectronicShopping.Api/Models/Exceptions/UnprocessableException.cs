@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ElectronicShopping.Api.Constants;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Models.Exceptions
@@ -7,8 +8,8 @@ namespace ElectronicShopping.Api.Models.Exceptions
     {
         public UnprocessableException()
         {
-            ProblemDetailsModel.Title = "Request Model Invalid or Missing";
-            ProblemDetailsModel.Detail = "Status for request model invalid or missing";
+            ProblemDetailsModel.Title = ExceptionMessageKeyConstant.UNPROCCESABLE_TITLE;
+            ProblemDetailsModel.Detail = ExceptionMessageKeyConstant.UNPROCCESABLE_DETAIL;
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }
 
@@ -27,7 +28,7 @@ namespace ElectronicShopping.Api.Models.Exceptions
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }
 
-        public UnprocessableException(string message, string title) : base(message, title)
+        public UnprocessableException(string title, string message) : base(title, message)
         {
             ProblemDetailsModel.Status = StatusCodes.Status422UnprocessableEntity;
         }

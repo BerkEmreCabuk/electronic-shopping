@@ -2,7 +2,7 @@
 {
     public class CacheKeyConstant
     {
-        public const string UserInfo = "user:";
-        public const string CartInfo = "cart:";
+        public const string USER_INFO = "user:";
+        public const string CART_INFO = "cart:";
     }
 }

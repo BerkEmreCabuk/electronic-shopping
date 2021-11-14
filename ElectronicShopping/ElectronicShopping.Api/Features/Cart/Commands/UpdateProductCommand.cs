@@ -28,24 +28,27 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
     {
         private readonly Lazy<ICartRepository> _cartRepository;
         private readonly Lazy<IStockRepository> _stockRepository;
+        private readonly IMediator _mediator;
         private readonly ILogger<UpdateProductCommandHandler> _logger;
         public UpdateProductCommandHandler(
             Lazy<ICartRepository> cartRepository,
             Lazy<IStockRepository> stockRepository,
+            IMediator mediator,
             ILogger<UpdateProductCommandHandler> logger)
         {
             _cartRepository = cartRepository;
             _stockRepository = stockRepository;
+            _mediator = mediator;
             _logger = logger;
         }
         protected override async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var cart = await _cartRepository.Value.GetWithDetailByUserIdAsync(request.UserId);
-            if (cart.IsNull())
+            if (cart == null)
                 throw new NotFoundException("cart not found");
 
             var cartDetail = cart.CartDetails.FirstOrDefault(x => x.ItemId == request.ItemId);
-            if (cartDetail.IsNull())
+            if (cartDetail == null)
                 throw new NotFoundException("product not found in cart");
 
             var stock = await _stockRepository.Value.GetByItemId(request.ItemId);
@@ -66,6 +69,8 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
             stock.ReduceFreeQuantity(differenceQuantity);
             await _cartRepository.Value.SaveChangeAsync();
             _logger.LogInformation("Update product {@cartDetail}", cartDetail);
+
+            await _mediator.Send(new UpdateShoppingCartCacheCommand(request.UserId), cancellationToken);
         }
     }
 }

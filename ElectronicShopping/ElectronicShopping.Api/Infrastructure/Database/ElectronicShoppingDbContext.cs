@@ -21,11 +21,13 @@ namespace ElectronicShopping.Api.Infrastructure.Database
             modelBuilder.Entity<UserEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<ItemEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<StockEntity>(e =>
@@ -34,11 +36,13 @@ namespace ElectronicShopping.Api.Infrastructure.Database
                 e.HasOne(x => x.Item)
                  .WithMany(x => x.Stocks)
                  .HasForeignKey(x => x.ItemId);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<CartEntity>(e =>
             {
                 e.HasKey(x => x.Id);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
 
             modelBuilder.Entity<CartDetailEntity>(e =>
@@ -47,6 +51,10 @@ namespace ElectronicShopping.Api.Infrastructure.Database
                 e.HasOne(x => x.Cart)
                  .WithMany(x => x.CartDetails)
                  .HasForeignKey(x => x.CartId);
+                e.HasOne(x => x.Item)
+                 .WithMany(x => x.CartDetails)
+                 .HasForeignKey(x => x.ItemId);
+                e.Property(p => p.RowVersion).IsRowVersion();
             });
         }
     }

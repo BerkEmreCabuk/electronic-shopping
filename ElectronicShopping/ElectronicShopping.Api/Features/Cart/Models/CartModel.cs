@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ElectronicShopping.Api.Features.Cart.Models
 {
-    public class GetCartResponseModel : IMapping
+    public class CartModel : IMapping
     {
         public long Id { get; set; }
         public long UserId { get; set; }
@@ -15,7 +15,7 @@ namespace ElectronicShopping.Api.Features.Cart.Models
         public void CreateMappings(IProfileExpression profileExpression)
         {
             profileExpression
-                .CreateMap<CartEntity, GetCartResponseModel>()
+                .CreateMap<CartEntity, CartModel>()
                 .ForMember(dest => dest.Details, opt => opt.MapFrom((src, dest) =>
                 {
                     return src.CartDetails;

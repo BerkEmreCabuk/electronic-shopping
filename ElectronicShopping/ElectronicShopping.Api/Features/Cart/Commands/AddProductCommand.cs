@@ -39,18 +39,21 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
         private readonly Lazy<ICartRepository> _cartRepository;
         private readonly Lazy<IStockRepository> _stockRepository;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediator;
         private readonly ILogger<AddProductCommandHandler> _logger;
         public AddProductCommandHandler(
             Lazy<ICartDetailRepository> cartDetailRepository,
             Lazy<ICartRepository> cartRepository,
             Lazy<IStockRepository> stockRepository,
             IMapper mapper,
+            IMediator mediator,
             ILogger<AddProductCommandHandler> logger)
         {
             _cartDetailRepository = cartDetailRepository;
             _cartRepository = cartRepository;
             _stockRepository = stockRepository;
             _mapper = mapper;
+            _mediator = mediator;
             _logger = logger;
         }
         protected override async Task Handle(AddProductCommand request, CancellationToken cancellationToken)
@@ -65,8 +68,9 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
 
             stock.ReduceFreeQuantity(request.Quantity);
             await _cartDetailRepository.Value.SaveChangeAsync();
-
             _logger.LogInformation("Add product {@request}", request);
+
+            await _mediator.Send(new UpdateShoppingCartCacheCommand(request.UserId), cancellationToken);
         }
     }
 }

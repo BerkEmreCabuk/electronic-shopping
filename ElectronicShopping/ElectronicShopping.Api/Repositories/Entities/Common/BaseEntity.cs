@@ -29,10 +29,5 @@ namespace ElectronicShopping.Api.Repositories.Entities.Common
             UpdateDate = DateTime.Now;
             Status = RecordStatuses.PASSIVE;
         }
-
-        public bool IsNull()
-        {
-            return this == null;
-        }
     }
 }

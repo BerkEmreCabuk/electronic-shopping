@@ -32,7 +32,7 @@ namespace ElectronicShopping.Api.Features.Cart
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(GetCartResponseModel), 200)]
+        [ProducesResponseType(typeof(CartModel), 200)]
         [ProducesResponseType(typeof(ProblemDetails), 400)]
         [ProducesResponseType(typeof(ProblemDetails), 401)]
         [ProducesResponseType(typeof(ProblemDetails), 404)]

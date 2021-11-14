@@ -4,6 +4,7 @@ using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Repositories
@@ -16,7 +17,7 @@ namespace ElectronicShopping.Api.Repositories
         {
             _dbContext = dbContext;
         }
-        public async Task<decimal> GetItemPriceAsync(long itemId)
+        public async Task<decimal> GetItemPriceAsync(long itemId, CancellationToken ct = default)
         {
             return await Query()
                 .Where(
@@ -24,7 +25,7 @@ namespace ElectronicShopping.Api.Repositories
                     x.Id == itemId &&
                     x.Status == RecordStatuses.ACTIVE)
                 .Select(x => x.Price)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(ct);
         }
     }
 }

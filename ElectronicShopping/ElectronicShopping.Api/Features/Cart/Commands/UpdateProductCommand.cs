@@ -5,6 +5,7 @@ using ElectronicShopping.Api.Models.Exceptions;
 using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
 using MediatR;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,26 +25,26 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
 
     public class UpdateProductCommandHandler : AsyncRequestHandler<UpdateProductCommand>
     {
-        private readonly ICartRepository _cartRepository;
-        private readonly IStockRepository _stockRepository;
+        private readonly Lazy<ICartRepository> _cartRepository;
+        private readonly Lazy<IStockRepository> _stockRepository;
         public UpdateProductCommandHandler(
-            ICartRepository cartRepository,
-            IStockRepository stockRepository)
+            Lazy<ICartRepository> cartRepository,
+            Lazy<IStockRepository> stockRepository)
         {
             _cartRepository = cartRepository;
             _stockRepository = stockRepository;
         }
         protected override async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
-            var cart = await _cartRepository.GetWithDetailByUserIdAsync(request.UserId);
+            var cart = await _cartRepository.Value.GetWithDetailByUserIdAsync(request.UserId);
             if (cart.IsNull())
-                throw new UnprocessableException("cart not found");
+                throw new NotFoundException("cart not found");
 
             var cartDetail = cart.CartDetails.FirstOrDefault(x => x.ItemId == request.ItemId);
             if (cartDetail.IsNull())
-                throw new UnprocessableException("product not found in cart");
+                throw new NotFoundException("product not found in cart");
 
-            var stock = await _stockRepository.GetByItemId(request.ItemId);
+            var stock = await _stockRepository.Value.GetByItemId(request.ItemId);
             var differenceQuantity = request.Quantity - cartDetail.Quantity;
             if (request.Quantity == 0)
             {
@@ -57,8 +58,8 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
 
                 cartDetail.ChangeQuantity(request.Quantity);
             }
-            stock.ReduceFreeQuantity(request.Quantity - cartDetail.Quantity);
-            await _cartRepository.SaveChangeAsync();
+            stock.ReduceFreeQuantity(differenceQuantity);
+            await _cartRepository.Value.SaveChangeAsync();
         }
     }
 }

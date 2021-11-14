@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Infrastructure.Cache.Redis
@@ -12,10 +13,10 @@ namespace ElectronicShopping.Api.Infrastructure.Cache.Redis
             _redisServer = redisServer;
         }
 
-        public async Task Add(string key, object data)
+        public async Task Add(string key, object data, TimeSpan? expireTime = null)
         {
             string jsonData = JsonSerializer.Serialize(data);
-            await _redisServer.Database.StringSetAsync(key, jsonData);
+            await _redisServer.Database.StringSetAsync(key, jsonData, expireTime);
         }
 
         public async Task<bool> Any(string key)
@@ -42,6 +43,11 @@ namespace ElectronicShopping.Api.Infrastructure.Cache.Redis
         public void Clear()
         {
             _redisServer.FlushDatabase();
+        }
+
+        public async Task<bool> KeyExists(string key)
+        {
+            return await _redisServer.Database.KeyExistsAsync(key);
         }
     }
 }

@@ -37,37 +37,11 @@ namespace ElectronicShopping.Api
                 .AddRepositories()
                 .AddApiVersionManager()
                 .AddUserModel(Configuration)
+                .AddSwagger()
                 .AddMediatR(Assembly.Load(CommonKeyConstant.SERVICE_NAME))
                 .AddControllers();
 
             Log.Logger = LoggingHelper.CustomLoggerConfiguration(Configuration);
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = CommonKeyConstant.SERVICE_NAME, Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Scheme = "Bearer",
-                    Type = SecuritySchemeType.ApiKey,
-                    BearerFormat = "JWT"
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                    {
-                        {
-                            new OpenApiSecurityScheme
-                            {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                            },
-                            new string[] {}
-                        }
-                    });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -82,12 +56,19 @@ namespace ElectronicShopping.Api
 
             app.UseRouting();
 
-            app.UseAuthorization();
+            app.MapWhen(x => (x.Request.Path.ToString().ToUpperInvariant().EndsWith("/AUTHENTICATE")), appBuilder =>
+            {
+                appBuilder.Run(appBuilder
+                    .UseRouting()
+                    .UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapControllerRoute(
+                            name: "v1",
+                            pattern: "v1/{controller}/{action}/{id}");
+                    }).Build());
+            });
 
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
-            app.UseMiddleware<TokenMiddleware>();
-            app.UseMiddleware<RequestPerformanceMiddleware>();
-
+            app.UseMiddlewares();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

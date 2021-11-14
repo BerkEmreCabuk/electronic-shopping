@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Repositories
@@ -24,7 +25,7 @@ namespace ElectronicShopping.Api.Repositories
             return _dbContext.Set<T>().AsQueryable();
         }
 
-        public async Task<IList<T>> GetAllAsync(bool hasTracking = false, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<IList<T>> GetAllAsync(bool hasTracking = false, CancellationToken ct = default, params Expression<Func<T, object>>[] includeProperties)
         {
             var query = _dbContext.Set<T>().Where(x => x.Status == RecordStatuses.ACTIVE);
             foreach (var includeProperty in includeProperties)
@@ -33,16 +34,16 @@ namespace ElectronicShopping.Api.Repositories
             }
 
             return hasTracking
-                ? await query.ToListAsync()
-                : await query.AsNoTracking().ToListAsync();
+                ? await query.ToListAsync(ct)
+                : await query.AsNoTracking().ToListAsync(ct);
         }
 
-        public async Task<T> GetAsync(int id)
+        public async Task<T> GetAsync(int id, CancellationToken ct = default)
         {
-            return await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.Status == RecordStatuses.ACTIVE);
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(x => x.Id == id && x.Status == RecordStatuses.ACTIVE, ct);
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = true, params Expression<Func<T, object>>[] includeProperties)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate, bool hasTracking = true, CancellationToken ct = default, params Expression<Func<T, object>>[] includeProperties)
         {
             var query = _dbContext.Set<T>().Where(predicate);
             foreach (var includeProperty in includeProperties)
@@ -51,25 +52,25 @@ namespace ElectronicShopping.Api.Repositories
             }
 
             return hasTracking
-                ? await query.FirstOrDefaultAsync()
-                : await query.AsNoTracking().FirstOrDefaultAsync();
+                ? await query.FirstOrDefaultAsync(ct)
+                : await query.AsNoTracking().FirstOrDefaultAsync(ct);
         }
 
-        public async Task<bool> ExistAsync(int id)
+        public async Task<bool> ExistAsync(int id, CancellationToken ct = default)
         {
-            var entity = await GetAsync(id);
+            var entity = await GetAsync(id, ct);
             return entity != null;
         }
 
-        public async Task<bool> ExistAsync(Expression<Func<T, bool>> predicate)
+        public async Task<bool> ExistAsync(Expression<Func<T, bool>> predicate, CancellationToken ct = default)
         {
-            return await Query().AnyAsync(predicate);
+            return await Query().AnyAsync(predicate, ct);
         }
 
-        public async Task<T> AddAsync(T entity)
+        public async Task<T> AddAsync(T entity, CancellationToken ct = default)
         {
             entity.Add();
-            await _dbContext.AddAsync(entity);
+            await _dbContext.AddAsync(entity, ct);
             return entity;
         }
 
@@ -85,9 +86,9 @@ namespace ElectronicShopping.Api.Repositories
             _dbContext.Set<T>().Remove(entity);
         }
 
-        public async Task SaveChangeAsync()
+        public async Task SaveChangeAsync(CancellationToken ct = default)
         {
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(ct);
         }
     }
 }

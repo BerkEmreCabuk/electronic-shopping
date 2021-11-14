@@ -30,7 +30,7 @@ namespace ElectronicShopping.Api.Helpers
                 clientConfiguration.ExchangeType = rabbitMqConfigModel.ExchangeType;
                 clientConfiguration.DeliveryMode = RabbitMQDeliveryMode.Durable;
                 clientConfiguration.Port = rabbitMqConfigModel.Port;
-                clientConfiguration.VHost = "/";
+                clientConfiguration.VHost = rabbitMqConfigModel.Hostname;
                 clientConfiguration.Hostnames.Add("localhost");
                 sinkConfiguration.RestrictedToMinimumLevel = LogEventLevel.Information;
                 sinkConfiguration.TextFormatter = new JsonFormatter();

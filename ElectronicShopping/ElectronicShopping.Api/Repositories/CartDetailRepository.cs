@@ -2,6 +2,7 @@
 using ElectronicShopping.Api.Infrastructure.Database;
 using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Repositories
@@ -18,9 +19,9 @@ namespace ElectronicShopping.Api.Repositories
             _dbContext = dbContext;
             _itemRepository = itemRepository;
         }
-        public async Task CreateAsync(CartDetailEntity cartDetailEntity)
+        public async Task CreateAsync(CartDetailEntity cartDetailEntity, CancellationToken ct = default)
         {
-            var currentCartDetail = await GetByCartIdAndItemId(cartDetailEntity.CartId, cartDetailEntity.ItemId);
+            var currentCartDetail = await GetByCartIdAndItemIdAsync(cartDetailEntity.CartId, cartDetailEntity.ItemId, ct);
             if (currentCartDetail != null)
             {
                 currentCartDetail.AddQuantity(cartDetailEntity.Quantity);
@@ -31,40 +32,22 @@ namespace ElectronicShopping.Api.Repositories
                     cartDetailEntity.Cart.Add();
 
                 var price = cartDetailEntity.Item == null
-                    ? await _itemRepository.GetItemPriceAsync(cartDetailEntity.ItemId)
+                    ? await _itemRepository.GetItemPriceAsync(cartDetailEntity.ItemId, ct)
                     : cartDetailEntity.Item.Price;
 
-                cartDetailEntity.Cart.AddAmount(cartDetailEntity.Quantity * price);
-                await AddAsync(cartDetailEntity);
+                cartDetailEntity.AddAmount(cartDetailEntity.Quantity, price);
+                await AddAsync(cartDetailEntity, ct);
             }
         }
 
-        public async Task UpdateAsync(CartDetailEntity cartDetailEntity)
-        {
-            var currentCartDetail = await GetByCartIdAndItemId(cartDetailEntity.CartId, cartDetailEntity.ItemId);
-            if (currentCartDetail != null)
-            {
-                currentCartDetail.Quantity += cartDetailEntity.Quantity;
-                currentCartDetail.Cart.Amount += cartDetailEntity.Quantity * currentCartDetail.Item.Price;
-            }
-            else
-            {
-                if (cartDetailEntity.Cart != null)
-                    cartDetailEntity.Cart.Add();
-                await AddAsync(cartDetailEntity);
-            }
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<CartDetailEntity> GetByCartIdAndItemId(long cartId, long itemId)
+        public async Task<CartDetailEntity> GetByCartIdAndItemIdAsync(long cartId, long itemId, CancellationToken ct = default)
         {
             return await GetAsync(
                 x =>
                 x.CartId == cartId &&
                 x.ItemId == itemId &&
                 x.Status == RecordStatuses.ACTIVE,
-                true,
-                x => x.Item);
+                true, ct);
         }
     }
 }

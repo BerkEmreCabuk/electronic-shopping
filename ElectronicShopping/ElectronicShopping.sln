@@ -7,9 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{03047B95-64D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8A1B8699-AD2B-4428-8583-A1BAE54F0DE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicShopping.Api", "ElectronicShopping.Api\ElectronicShopping.Api.csproj", "{86BFF030-3E69-4182-B6AB-8C47A2A4FE53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api", "ElectronicShopping.Api\ElectronicShopping.Api.csproj", "{86BFF030-3E69-4182-B6AB-8C47A2A4FE53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicShopping.Api.Tests", "ElectronicShopping.Api.Tests\ElectronicShopping.Api.Tests.csproj", "{B158AE82-2D06-41FA-BF54-C47C6EB6E826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api.Tests", "ElectronicShopping.Api.Tests\ElectronicShopping.Api.Tests.csproj", "{B158AE82-2D06-41FA-BF54-C47C6EB6E826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicShopping.LogConsumer", "ElectronicShopping.LogConsumer\ElectronicShopping.LogConsumer.csproj", "{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{B158AE82-2D06-41FA-BF54-C47C6EB6E826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B158AE82-2D06-41FA-BF54-C47C6EB6E826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B158AE82-2D06-41FA-BF54-C47C6EB6E826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{86BFF030-3E69-4182-B6AB-8C47A2A4FE53} = {03047B95-64D8-42C4-864C-29A11907F8D6}
 		{B158AE82-2D06-41FA-BF54-C47C6EB6E826} = {8A1B8699-AD2B-4428-8583-A1BAE54F0DE9}
+		{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49} = {03047B95-64D8-42C4-864C-29A11907F8D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D7529AE4-627B-4FC6-A946-FE1401EBB4B1}

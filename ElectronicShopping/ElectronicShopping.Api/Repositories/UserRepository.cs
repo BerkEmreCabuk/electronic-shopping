@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ElectronicShopping.Api.Enums;
 using ElectronicShopping.Api.Helpers;
 using ElectronicShopping.Api.Infrastructure.Database;
 using ElectronicShopping.Api.Models;
@@ -24,7 +25,12 @@ namespace ElectronicShopping.Api.Repositories
 
         public async Task<UserModel> AuthenticateUser(string userName, string password, CancellationToken ct = default)
         {
-            var userEntity = await _dbContext.Users.Where(e => e.UserName == userName && e.Password == SecurityHelper.ComputeSha256Hash(password)).FirstOrDefaultAsync(ct);
+            var userEntity = await GetAsync(
+                    x =>
+                    x.UserName == userName &&
+                    x.Password == SecurityHelper.ComputeSha256Hash(password) &&
+                    x.Status == RecordStatuses.ACTIVE,
+                    false, ct);
 
             return userEntity == null ? null : _mapper.Map<UserModel>(userEntity);
         }

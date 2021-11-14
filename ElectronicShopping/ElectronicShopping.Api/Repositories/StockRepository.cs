@@ -2,6 +2,7 @@
 using ElectronicShopping.Api.Infrastructure.Database;
 using ElectronicShopping.Api.Repositories.Entities;
 using ElectronicShopping.Api.Repositories.Interfaces;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Repositories
@@ -15,12 +16,13 @@ namespace ElectronicShopping.Api.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<StockEntity> GetByItemId(long itemId, bool hasTracking = true)
+        public async Task<StockEntity> GetByItemId(long itemId, bool hasTracking = true, CancellationToken ct = default)
         {
             return await this.GetAsync(
                 x =>
                 x.ItemId == itemId &&
-                x.Status == RecordStatuses.ACTIVE, hasTracking);
+                x.Status == RecordStatuses.ACTIVE,
+                hasTracking, ct);
         }
     }
 }

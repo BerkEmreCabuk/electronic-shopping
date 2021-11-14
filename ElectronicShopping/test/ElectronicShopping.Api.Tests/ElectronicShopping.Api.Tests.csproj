@@ -24,4 +24,8 @@
 	  <ProjectReference Include="..\..\src\ElectronicShopping.Api\ElectronicShopping.Api.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Features\Cart\" />
+	</ItemGroup>
+
 </Project>

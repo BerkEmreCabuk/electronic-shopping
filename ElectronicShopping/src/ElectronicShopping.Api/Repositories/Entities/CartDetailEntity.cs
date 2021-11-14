@@ -20,15 +20,12 @@ namespace ElectronicShopping.Api.Repositories.Entities
             var price = GetPrice();
             AddAmount(quantity, price);
             Quantity += quantity;
-            Update();
         }
         public void ChangeQuantity(int quantity)
         {
             var price = GetPrice();
             AddAmount((quantity - Quantity));
-            Cart.AddAmount((quantity - Quantity) * price);
             Quantity = quantity;
-            Update();
         }
         public void AddAmount(int quantity, decimal? price = null)
         {
@@ -36,6 +33,7 @@ namespace ElectronicShopping.Api.Repositories.Entities
                 price = GetPrice();
             Amount += price.Value * quantity;
             Cart.AddAmount(price.Value * quantity);
+            Update();
         }
         public decimal GetPrice()
         {

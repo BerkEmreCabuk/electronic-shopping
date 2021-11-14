@@ -70,7 +70,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
             await _cartDetailRepository.Value.SaveChangeAsync();
             _logger.LogInformation("Add product {@request}", request);
 
-            await _mediator.Send(new UpdateShoppingCartCacheCommand(request.UserId), cancellationToken);
+            await _mediator.Send(new UpdateCartCacheCommand(request.UserId), cancellationToken);
         }
     }
 }

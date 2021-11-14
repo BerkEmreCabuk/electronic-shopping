@@ -7,11 +7,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{03047B95-64D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8A1B8699-AD2B-4428-8583-A1BAE54F0DE9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api", "ElectronicShopping.Api\ElectronicShopping.Api.csproj", "{86BFF030-3E69-4182-B6AB-8C47A2A4FE53}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api", "src\ElectronicShopping.Api\ElectronicShopping.Api.csproj", "{86BFF030-3E69-4182-B6AB-8C47A2A4FE53}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api.Tests", "ElectronicShopping.Api.Tests\ElectronicShopping.Api.Tests.csproj", "{B158AE82-2D06-41FA-BF54-C47C6EB6E826}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ElectronicShopping.Api.Tests", "test\ElectronicShopping.Api.Tests\ElectronicShopping.Api.Tests.csproj", "{B158AE82-2D06-41FA-BF54-C47C6EB6E826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicShopping.LogConsumer", "ElectronicShopping.LogConsumer\ElectronicShopping.LogConsumer.csproj", "{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ElectronicShopping.LogConsumer", "src\ElectronicShopping.LogConsumer\ElectronicShopping.LogConsumer.csproj", "{DF1804A0-28C1-4EC6-BFE9-F46C13ADBB49}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

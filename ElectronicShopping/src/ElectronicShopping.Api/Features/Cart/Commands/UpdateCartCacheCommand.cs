@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace ElectronicShopping.Api.Features.Cart.Commands
 {
-    public class UpdateShoppingCartCacheCommand : IRequest
+    public class UpdateCartCacheCommand : IRequest
     {
-        public UpdateShoppingCartCacheCommand(long userId)
+        public UpdateCartCacheCommand(long userId)
         {
             UserId = userId;
         }
@@ -20,7 +20,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
         public long UserId { get; set; }
     }
 
-    public class UpdateShoppingCartCacheCommandHandler : AsyncRequestHandler<UpdateShoppingCartCacheCommand>
+    public class UpdateShoppingCartCacheCommandHandler : AsyncRequestHandler<UpdateCartCacheCommand>
     {
         private readonly Lazy<ICartRepository> _cartRepository;
         private readonly ICacheService _cacheService;
@@ -36,7 +36,7 @@ namespace ElectronicShopping.Api.Features.Cart.Commands
             _mapper = mapper;
         }
 
-        protected override async Task Handle(UpdateShoppingCartCacheCommand request, CancellationToken ct)
+        protected override async Task Handle(UpdateCartCacheCommand request, CancellationToken ct)
         {
             var shoppingCart = await _cartRepository.Value.GetWithDetailByUserIdAsync(request.UserId, false, ct);
 
